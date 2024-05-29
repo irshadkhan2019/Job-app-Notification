@@ -7,6 +7,9 @@ import { config } from '@notifications/config';
 import { Application } from 'express';
 import { healthRoutes } from './routes';
 import { checkConnection } from './elasticsearch';
+import { createConnection } from './queues/connection';
+import { Channel } from 'amqplib';
+import { consumeAuthEmailMessages } from './queues/email.consumer';
 
 const SERVER_PORT = 4001;
 const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'notificationServer', 'debug');
@@ -20,7 +23,13 @@ export function start(app: Application): void {
 }
 
 async function startQueues(): Promise<void> {
+  const emailChannel=await createConnection() as Channel;
+  await consumeAuthEmailMessages(emailChannel) //consumer(notification srvice) will consume 
 
+  // publish msg test
+  const message=JSON.stringify({name:'jobber',service:'notification'})
+  await emailChannel.assertExchange('jobber-email-notification','direct');
+  emailChannel.publish('jobber-email-notification','auth-email',Buffer.from(message));
 }
 
 function startElasticSearch(): void {
