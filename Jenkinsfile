@@ -2,7 +2,7 @@
 //  1.Define creds in Jenkins GUI
 // 2 .credentials("credId") binds the credentails to your env variable
 //  3. for that we need Credentials Binding plugin
-def gv 
+// def gv 
 
 pipeline {
     agent any
@@ -21,19 +21,9 @@ pipeline {
    // define own env var so that they are availbe below in all stages
    environment {
      NEW_VERSION = '1.3.0'
-     // use cfedentials
-     SERVER_CREDENTIALS = credentials('docker-hub')
    }
     stages {
 
-         stage('init') {
-            steps {
-              script {
-                gv=load "script.groovy"
-              }
-            }
-        }
-      
         stage('build') {
             steps {
                 echo 'Building application'
@@ -56,13 +46,12 @@ pipeline {
                   message 'Select env to deploy to'
                   ok 'Env Selection DOne'
                   parameters {
-                     choice(name:'ENV_1',choices: ['dev','staging','prod'],description:'select env choices')
-                     choice(name:'ENV_2',choices: ['dev','staging','prod'],description:'select env choices')
+                     choice(name:'ENV_1',choices: ['dev','staging','prod'],description:'select env1 choices')
+                     choice(name:'ENV_2',choices: ['dev','staging','prod'],description:'select env2 choices')
                   }
               }
             steps {
                 echo 'Deploying app'
-                echo "deploying with cred ${SERVER_CREDENTIALS}"
                 echo "deploying version ${params.VERSION}"
                 echo "deploying to ${ENV_1}"
                echo "deploying to ${ENV_2}"
