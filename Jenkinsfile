@@ -47,10 +47,10 @@ pipeline {
                 echo 'Deploying app'
               // TO make creds available only to this stahe build not all
                 withCredentails([
-                  usernamePassword(credentails:'docker-hub',usernameVariable:USER,passwordVariable:PWD)
+                  usernamePassword(credentails:'docker-hub',usernameVariable: USER,passwordVariable: PWD)
                 ]){
                   echo "Local creds inside stage build"
-                  sh "script ${USER} ${PWD}"
+                  // sh "script ${USER} ${PWD}"
                 }
                 echo "deploying with cred ${SERVER_CREDENTIALS}"
                 echo "deploying version ${params.VERSION}"
