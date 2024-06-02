@@ -17,11 +17,6 @@ pipeline {
         booleanParam(name:'executeTests',defaultValue: true,description:'bool param')
     }
   // params are suitable usage with exapressionss
-  
-    options {
-        // Timeout counter starts AFTER agent is allocated
-        timeout(time: 1, unit: 'SECONDS')
-    }
    // define own env var so that they are availbe below in all stages
    environment {
      NEW_VERSION = '1.3.0'
