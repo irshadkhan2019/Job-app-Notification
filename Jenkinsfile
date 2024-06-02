@@ -7,7 +7,7 @@ pipeline {
     agent any
   // access build tools for ur project
     tools {
-        nodejs 'Nodejs'
+        nodejs 'my-nodejs'
     }
   // parameters used to provided some external configuration to ur build to change behaviour
   // eg .build that deploys app to staging server and u want to select version of app that u want to deploy
