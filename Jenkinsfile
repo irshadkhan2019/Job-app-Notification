@@ -52,18 +52,20 @@ pipeline {
             }
         }
         stage('deploy') {
+           input {
+                  message 'Select env to deploy to'
+                  ok 'Env Selection DOne"
+                  parameters {
+                     choice(name:'ENV_1',choices: ['dev','staging','prod'],description:'select env choices')
+                     choice(name:'ENV_2',choices: ['dev','staging','prod'],description:'select env choices')
+                  }
+              }
             steps {
                 echo 'Deploying app'
-                input {
-                  message "Select env to deploy to"
-                  ok "Env Selection DOne"
-                  parameters {
-                     choice(name:'ENV',choices: ['dev','staging','prod'],description:'select env choices')
-                  }
-                }
                 echo "deploying with cred ${SERVER_CREDENTIALS}"
                 echo "deploying version ${params.VERSION}"
-                echo "deploying to ${ENV}"
+                echo "deploying to ${ENV_1}"
+               echo "deploying to ${ENV_2}"
             }
         }
       
