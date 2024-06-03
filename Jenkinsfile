@@ -13,7 +13,7 @@ pipeline {
   // parameters used to provided some external configuration to ur build to change behaviour
   // eg .build that deploys app to staging server and u want to select version of app that u want to deploy
     parameters {
-        string(name:'VERSION-NAME',defaultValue:'',description:'version to deploy on prod')
+        string(name:'ACTUAL_KEY',defaultValue:'',description:'key for npmrc')
         choice(name:'VERSION',choices: ['1.1.0','1.3.0'],description:'select choices')
         booleanParam(name:'executeTests',defaultValue: true,description:'bool param')
     }
@@ -23,11 +23,37 @@ pipeline {
      NEW_VERSION = '1.3.0'
    }
     stages {
-
-        stage('build') {
+        
+        stage('configure npmrc') {
             steps {
-                echo 'Building application'
-                echo "Version is ${NEW_VERSION}"
+                echo 'npmrc conf '
+                script{
+                    
+                   sh "sed -i 's/Removed/${ACTUAL_KEY}/' './.npmrc'"
+                }
+            }
+        }
+        
+        stage('install packages') {
+            steps {
+                echo 'Installing application'
+                script{
+                    
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('build image ') {
+            steps {
+                echo 'Building Image'
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub',passwordVariable: 'PASS', usernameVariable: 'USER')]){
+                       sh 'docker build -t izuku11/demo-app:notifcations-2.0 .'
+                       sh 'echo $PASS | docker login -u $USER --password-stdin'
+                       sh 'docker push izuku11/demo-app:notifcations-2.0'
+                    }
+                }
             }
         }
         stage('test') {
@@ -41,22 +67,13 @@ pipeline {
                 echo 'Testing app'
             }
         }
+        
         stage('deploy') {
-           input {
-                  message 'Select env to deploy to'
-                  ok 'Env Selection DOne'
-                  parameters {
-                     choice(name:'ENV_1',choices: ['dev','staging','prod'],description:'select env1 choices')
-                     choice(name:'ENV_2',choices: ['dev','staging','prod'],description:'select env2 choices')
-                  }
-              }
-            steps {
-                echo 'Deploying app'
-                echo "deploying version ${params.VERSION}"
-                echo "deploying to ${ENV_1}"
-               echo "deploying to ${ENV_2}"
+              steps {
+                echo 'deploy app'
+            }
+    
             }
         }
       
     }
-}
