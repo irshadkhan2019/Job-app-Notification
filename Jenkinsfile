@@ -1,8 +1,4 @@
-// Using credentials in JEnkins file
-//  1.Define creds in Jenkins GUI
-// 2 .credentials("credId") binds the credentails to your env variable
-//  3. for that we need Credentials Binding plugin
-// def gv 
+library 'Jenkins-shared-library@dev'
 
 pipeline {
     agent any
@@ -36,23 +32,19 @@ pipeline {
         
         stage('install packages') {
             steps {
-                echo 'Installing application'
+              
                 script{
-                    
-                    sh 'npm install'
+                    // from global shared library
+                    installPackages()
                 }
             }
         }
 
         stage('build image ') {
             steps {
-                echo 'Building Image'
+               
                 script{
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub',passwordVariable: 'PASS', usernameVariable: 'USER')]){
-                       sh 'docker build -t izuku11/demo-app:notifcations-2.0 .'
-                       sh 'echo $PASS | docker login -u $USER --password-stdin'
-                       sh 'docker push izuku11/demo-app:notifcations-2.0'
-                    }
+                    buildImage()
                 }
             }
         }
