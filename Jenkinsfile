@@ -44,7 +44,8 @@ pipeline {
             steps {
                
                 script{
-                    buildImage()
+                  // pass param
+                    buildImage 'izuku11/demo-app:notifcations-2.0'
                 }
             }
         }
