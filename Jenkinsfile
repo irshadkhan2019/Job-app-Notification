@@ -62,7 +62,7 @@ pipeline {
             }
           // if xecute test param is true then execute below step
             steps {
-                echo 'Testing app'
+                echo 'Testing webhook'
             }
         }
         
