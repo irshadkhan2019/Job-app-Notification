@@ -7,7 +7,7 @@ import { config } from '@notifications/config';
 import { Application } from 'express';
 import { healthRoutes } from '@notifications/routes';
 import { checkConnection } from '@notifications/elasticsearch';
-import { createConnection } from './queues/connection';
+import { createConnection } from '@notifications/queues/connection';
 import { Channel } from 'amqplib';
 import { consumeAuthEmailMessages, consumeOrderEmailMessages } from './queues/email.consumer';
 
@@ -17,7 +17,7 @@ const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'notificationS
 export function start(app: Application): void {
   startServer(app);
   //http://localhost:4001/notifiation-routes
-  app.use('',healthRoutes);
+  app.use('', healthRoutes());
   startQueues();
   startElasticSearch();
 }

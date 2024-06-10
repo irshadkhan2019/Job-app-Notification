@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.13.1",
-    "@irshadkhan2019/job-app-shared": "^1.1.1",
+    "@irshadkhan2019/job-app-shared": "^1.1.2",
     "amqplib": "^0.10.4",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
@@ -54,10 +54,7 @@
     "winston": "^3.13.0"
   },
   "overrides": {
-
     "minimatch": "5.1.2",
-
     "glob": "8.1.0"
-
   }
 }
